@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/constr-sw-2023-1/backend-g8#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
