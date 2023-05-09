@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8088
 
-CMD [ "node", "server.js" ]
+CMD [ "npm", "run", "start" ]

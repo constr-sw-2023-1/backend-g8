@@ -1,0 +1,14 @@
+version: '3.4'
+networks:
+  grupo8:
+    driver: bridge
+
+services:
+   # Reservations Backend   
+  reservations-backend:
+    container_name: reservations-backend
+    build: .
+    ports:
+      - 8088:8088
+    networks:
+      - grupo8
