@@ -1,13 +1,16 @@
-FROM node:19
+FROM node:19-alpine
 
+# Create app directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
+# Install dependencies
+COPY package.json .
 RUN npm install
 
-COPY . .
+# Bundle app source
+COPY server.js ./
 
+# Exports
 EXPOSE 8088
-
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "dev" ]

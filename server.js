@@ -1,10 +1,17 @@
 const express = require('express')
+const dotenv = require('dotenv')
+const connectDB = require('./config/db')
+
+// Carrega variáveis de ambiente
+dotenv.config({ path: './config/config.env' })
+
+// Conecta no banco
+//connectDB()
 
 // arquivos de rotas
 const reservations = require('./routes/reservations')
 
-// Constants
-const PORT = 8088
+const PORT = process.env.PORT || 8088
 
 // App
 const app = express()
