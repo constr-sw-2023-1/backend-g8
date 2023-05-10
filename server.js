@@ -6,7 +6,7 @@ const connectDB = require('./config/db')
 dotenv.config({ path: './config/config.env' })
 
 // Conecta no banco
-//connectDB()
+connectDB()
 
 // arquivos de rotas
 const reservations = require('./routes/reservations')
