@@ -13,7 +13,15 @@ exports.getReservations = async (req, res, next) => {
 //@route    GET /reservations/:id
 //@access   Public
 exports.getReservation = async (req, res, next) => {
-  res.status(200).json({ success: true })
+  const reservations = await Reservation.findById(req.params.id)
+
+  if (!reservations) {
+    next(
+      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
+    )
+  }
+
+  res.status(200).json({ success: true, data: reservations })
 }
 
 //@desc     Cria uma reserva
