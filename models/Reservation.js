@@ -1,28 +1,23 @@
 const mongoose = require('mongoose')
 
 const ReservationSchema = new mongoose.Schema({
-  dateSchedule: [
-    {
-      day: Date,
-      hour: String,
-      shift: String,
+  dateSchedule: {
+    date: {
+      type: Date,
+      default: Date.now,
+      required: [true, 'Adicione uma data'],
     },
-  ],
-  dateReservationBegin: [
-    {
-      day: Date,
-      hour: Date,
-      shift: String,
-    },
-  ],
-  dateReservationEnd: [
-    {
-      day: Date,
-      hour: Date,
-      shift: String,
-    },
-  ],
-  resourceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Resources' },
+    shift: String,
+  },
+  dateReservationBegin: {
+    date: { type: Date, required: [true, 'Adicione uma data'] },
+    shift: String,
+  },
+  dateReservationEnd: {
+    day: { type: Date, required: [true, 'Adicione uma data'] },
+    shift: String,
+  },
+  //resourceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Resources' },
 })
 
 module.exports = mongoose.model('Reservation', ReservationSchema)
