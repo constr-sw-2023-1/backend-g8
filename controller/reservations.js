@@ -13,15 +13,15 @@ exports.getReservations = async (req, res, next) => {
 //@route    GET /reservations/:id
 //@access   Public
 exports.getReservation = async (req, res, next) => {
-  const reservations = await Reservation.findById(req.params.id)
+  const reservation = await Reservation.findById(req.params.id)
 
-  if (!reservations) {
+  if (!reservation) {
     next(
       new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
     )
   }
 
-  res.status(200).json({ success: true, data: reservations })
+  res.status(200).json({ success: true, data: reservation })
 }
 
 //@desc     Cria uma reserva
@@ -51,5 +51,13 @@ exports.patchReservation = async (req, res, next) => {
 //@route    DELETE /reservations/:id
 //@access   Public
 exports.deleteReservation = async (req, res, next) => {
-  res.status(200).json({ success: true })
+  const reservationDelete = await Reservation.findByIdAndRemove(req.params.id)
+
+  if (!reservationDelete) {
+    next(
+      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
+    )
+  }
+
+  res.status(200).json({ success: true, data: {} })
 }
