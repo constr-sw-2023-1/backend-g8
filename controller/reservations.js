@@ -1,4 +1,5 @@
 const Reservation = require('../models/Reservation')
+const ErrorResponse = require('../utils/errorResponse')
 
 //@desc     Lista todas as reservas
 //@route    GET /reservations
@@ -17,7 +18,10 @@ exports.getReservation = async (req, res, next) => {
 
   if (!reservation) {
     next(
-      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
+      new ErrorResponse(
+        `Nenhuma reserva com o id ${req.params.id} encontrado`,
+        404
+      )
     )
   }
 
@@ -55,7 +59,10 @@ exports.deleteReservation = async (req, res, next) => {
 
   if (!reservationDelete) {
     next(
-      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
+      new ErrorResponse(
+        `Nenhuma reserva com o id ${req.params.id} encontrado`,
+        404
+      )
     )
   }
 
