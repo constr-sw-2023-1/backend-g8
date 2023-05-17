@@ -20,6 +20,7 @@
   "paths": {
     "/": {
       "get": {
+        "summary": "Retorna todas as reservas",
         "description": "",
         "parameters": [],
         "responses": {
@@ -30,6 +31,7 @@
       },
       "post": {
         "description": "",
+        "summary": "Cria uma reserva",
         "parameters": [
           {
           "name": "Post reservation",
@@ -91,6 +93,7 @@
     },
     "/{id}": {
       "get": {
+        "summary": "Retorna uma reserva por id",
         "description": "",
         "parameters": [
           {
@@ -107,6 +110,7 @@
         }
       },
       "put": {
+        "summary": "Atualiza toda a reserva por id",
         "description": "",
         "parameters": [
           {
@@ -172,23 +176,8 @@
           }
         }
       },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
       "patch": {
+        "summary": "Atualiza a data da reserva por id",
         "description": "",
         "parameters": [
           {
@@ -231,6 +220,23 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta reserva por id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

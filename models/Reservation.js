@@ -25,8 +25,4 @@ const ReservationSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-// ReservationSchema.pre('save', function (next) {
-//   next()
-// })
-
 module.exports = mongoose.model('Reservation', ReservationSchema)
