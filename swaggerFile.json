@@ -30,7 +30,58 @@
       },
       "post": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+          "name": "Post reservation",
+          "in": "body",
+          "required": "true",
+          "description": "JSON object",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "dateSchedule": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "shift": {
+                    "type": "string"
+                  }
+                },
+                "required": ["date", "shift"]
+              },
+              "dateReservationBegin": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "shift": {
+                    "type": "string"
+                  }
+                },
+                "required": ["date", "shift"]
+              },
+              "dateReservationEnd": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "shift": {
+                    "type": "string"
+                  }
+                },
+                "required": ["date", "shift"]
+              }
+            }
+          }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -63,7 +114,57 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
+          },
+          {
+            "name": "Put reservation",
+            "in": "body",
+            "required": "true",
+            "description": "JSON object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dateSchedule": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "shift": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["date", "shift"]
+                },
+                "dateReservationBegin": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "shift": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["date", "shift"]
+                },
+                "dateReservationEnd": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "shift": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["date", "shift"]
+                }
+              }
+            }
+        }
         ],
         "responses": {
           "200": {
@@ -95,6 +196,41 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dateReservationBegin": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "shift": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["date", "shift"]
+                },
+                "dateReservationEnd": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "shift": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["date", "shift"]
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -104,5 +240,5 @@
         }
       }
     }
-  }
+  }   
 }
