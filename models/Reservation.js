@@ -14,7 +14,7 @@ const ReservationSchema = new mongoose.Schema({
     shift: String,
   },
   dateReservationEnd: {
-    day: {
+    date: {
       type: Date,
       default: Date.now,
       required: [true, 'Adicione uma data'],

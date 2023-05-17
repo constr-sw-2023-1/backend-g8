@@ -37,15 +37,45 @@ exports.createReservation = async (req, res, next) => {
 //@route    PUT /reservations/:id
 //@access   Public
 exports.updateReservation = async (req, res, next) => {
-  res.status(200).json({ success: true })
+  let reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body, 
+    { new: true, runValidators: true })
+
+  if (!reservation) {
+    next(
+      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrado`, 404)
+    )
+  }
+
+  const reservationUpdate = await Reservation.findById(req.params.id)
+
+  res.status(200).json({ success: true, data: reservationUpdate })
 }
 
 //@desc     Atualiza alguns atributos de uma reserva
 //@route    PATCH /reservations/:id
 //@access   Public
 exports.patchReservation = async (req, res, next) => {
-  res.status(200).json({ success: true })
-}
+  let reservation = await Reservation.findByIdAndUpdate(
+    req.params.id,
+    {
+      dateReservationBegin: req.body.dateReservationBegin,
+      dateReservationEnd: req.body.dateReservationEnd,
+      //dateSchedule: req.body.dateSchedule
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!reservation) {
+    return next(
+      new ErrorResponse(`Nenhuma reserva com o id ${req.params.id} encontrada`, 404)
+    );
+  }
+
+  const reservationUpdate = await Reservation.findById(req.params.id)
+
+  res.status(200).json({ success: true, data: reservationUpdate });
+};
+
 
 //@desc     Exclui uma reserva
 //@route    DELETE /reservations/:id
