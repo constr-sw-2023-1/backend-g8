@@ -2,17 +2,8 @@ const mongoose = require('mongoose')
 
 const ReservationSchema = new mongoose.Schema(
   {
-    dateReservationBegin: {
-      date: { type: Date, required: [true, 'Adicione uma data'] },
-      shift: String,
-    },
-    dateReservationEnd: {
-      date: {
-        type: Date,
-        required: [true, 'Adicione uma data'],
-      },
-      shift: String,
-    },
+    dateReservationBegin: { type: Date, required: [true, 'Adicione uma data'] },
+    dateReservationEnd: { type: Date, required: [true, 'Adicione uma data'] },
     resource: {
       resourceId: { type: Number },
       resourceName: { type: String },
