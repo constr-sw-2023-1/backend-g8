@@ -1,49 +1,61 @@
-const Reservation = require('../models/Reservation')
-const ErrorResponse = require('../utils/errorResponse')
+const Reservation = require("../models/Reservation");
+const ErrorResponse = require("../utils/errorResponse");
 
 //@desc     Lista todas as reservas
 //@route    GET /reservations
 //@access   Public
 exports.getReservations = async (req, res, next) => {
-  let reqQuery = { ...req.query }
+  let reqQuery = { ...req.query };
 
   // Create query string
-  let queryStr = JSON.stringify(reqQuery)
+  let queryStr = JSON.stringify(reqQuery);
 
   // Create query operators
-  queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`)
+  queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`);
 
-  const reservations = await Reservation.find(JSON.parse(queryStr))
+  const reservations = await Reservation.find(JSON.parse(queryStr));
 
-  res.status(200).json({ success: true, data: reservations })
-}
+  res.status(200).json({ success: true, data: reservations });
+};
 
 //@desc     Obtém uma reserva específica
 //@route    GET /reservations/:id
 //@access   Public
 exports.getReservation = async (req, res, next) => {
-  const reservation = await Reservation.findById(req.params.id)
+  try {
+    const reservation = await Reservation.findById(req.params.id);
 
-  if (!reservation) {
-    next(
-      new ErrorResponse(
+    if (!reservation) {
+      throw new ErrorResponse(
+        "G8-404/0",
         `Nenhuma reserva com o id ${req.params.id} encontrado`,
         404
-      )
-    )
-  }
+      );
+    }
 
-  res.status(200).json({ success: true, data: reservation })
-}
+    res.status(200).json({ success: true, data: reservation });
+  } catch (err) {
+    next(err);
+  }
+};
 
 //@desc     Cria uma reserva
 //@route    POST /reservations
 //@access   Public
 exports.createReservation = async (req, res, next) => {
-  const reservation = await Reservation.create(req.body)
-
-  res.status(201).json({ success: true, data: reservation })
-}
+  try {
+    const reservation = await Reservation.create(req.body);
+    res.status(201).json({ success: true, data: reservation });
+  } catch (err) {
+    next(
+      new ErrorResponse(
+        "G8-400/0",
+        "Não foi possível criar sua reserva, verifique o json",
+        400
+      )
+    );
+  }
+};
 
 //@desc     Atualiza todos os atributos de uma reserva
 //@route    PUT /reservations/:id
@@ -53,21 +65,22 @@ exports.updateReservation = async (req, res, next) => {
     req.params.id,
     req.body,
     { new: true, runValidators: true }
-  )
+  );
 
   if (!reservation) {
     next(
       new ErrorResponse(
+        "G8-404/0",
         `Nenhuma reserva com o id ${req.params.id} encontrado`,
         404
       )
-    )
+    );
   }
 
-  const reservationUpdate = await Reservation.findById(req.params.id)
+  const reservationUpdate = await Reservation.findById(req.params.id);
 
-  res.status(200).json({ success: true, data: reservationUpdate })
-}
+  res.status(200).json({ success: true, data: reservationUpdate });
+};
 
 //@desc     Atualiza alguns atributos de uma reserva
 //@route    PATCH /reservations/:id
@@ -81,36 +94,38 @@ exports.patchReservation = async (req, res, next) => {
       //dateSchedule: req.body.dateSchedule
     },
     { new: true, runValidators: true }
-  )
+  );
 
   if (!reservation) {
     return next(
       new ErrorResponse(
+        "G8-404/0",
         `Nenhuma reserva com o id ${req.params.id} encontrada`,
         404
       )
-    )
+    );
   }
 
-  const reservationUpdate = await Reservation.findById(req.params.id)
+  const reservationUpdate = await Reservation.findById(req.params.id);
 
-  res.status(200).json({ success: true, data: reservationUpdate })
-}
+  res.status(200).json({ success: true, data: reservationUpdate });
+};
 
 //@desc     Exclui uma reserva
 //@route    DELETE /reservations/:id
 //@access   Public
 exports.deleteReservation = async (req, res, next) => {
-  const reservationDelete = await Reservation.findByIdAndRemove(req.params.id)
+  const reservationDelete = await Reservation.findByIdAndRemove(req.params.id);
 
   if (!reservationDelete) {
     next(
       new ErrorResponse(
+        "G8-404/0",
         `Nenhuma reserva com o id ${req.params.id} encontrado`,
         404
       )
-    )
+    );
   }
 
-  res.status(200).json({ success: true, data: {} })
-}
+  res.status(200).json({ success: true, data: {} });
+};
