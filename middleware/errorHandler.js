@@ -1,5 +1,8 @@
 const ErrorResponse = require("../utils/errorResponse");
 
+// Array para armazenar a pilha de erros
+const errorStack = [];
+
 const errorHandler = (err, req, res, next) => {
   let errorCode = "G8-500";
   let statusCode = 500;
@@ -18,9 +21,17 @@ const errorHandler = (err, req, res, next) => {
     errorSource = "MongoDB";
   }
 
+  // Adicionar erro à pilha
+  errorStack.push({
+    errorCode,
+    statusCode,
+    message,
+    errorSource,
+  });
+
   res
     .status(statusCode)
     .json({ success: false, errorCode, error: message, errorSource });
 };
 
-module.exports = errorHandler;
+module.exports = { errorHandler, errorStack };

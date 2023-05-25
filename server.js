@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swaggerFile.json");
-const errorHandler = require("./middleware/errorHandler");
+const { errorHandler, errorStack } = require("./middleware/errorHandler");
 
 // Carrega variáveis de ambiente
 dotenv.config({ path: "./config/config.env" });
