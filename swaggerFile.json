@@ -7,22 +7,28 @@
   },
   "host": "localhost:8088",
   "basePath": "/reservations",
-  "schemes": [
-    "http",
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/": {
       "get": {
-        "summary": "Retorna todas as reservas",
+        "summary": "Retorna todas as reservas ou reservas por pesquisa",
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "dateReservationBegin",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateReservationEnd",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -34,54 +40,35 @@
         "summary": "Cria uma reserva",
         "parameters": [
           {
-          "name": "Post reservation",
-          "in": "body",
-          "required": "true",
-          "description": "JSON object",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "dateSchedule": {
-                "type": "object",
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date"
+            "name": "Post reservation",
+            "in": "body",
+            "required": "true",
+            "description": "JSON object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dateReservationBegin": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    }
                   },
-                  "shift": {
-                    "type": "string"
-                  }
+                  "required": ["date"]
                 },
-                "required": ["date", "shift"]
-              },
-              "dateReservationBegin": {
-                "type": "object",
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date"
+                "dateReservationEnd": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    }
                   },
-                  "shift": {
-                    "type": "string"
-                  }
-                },
-                "required": ["date", "shift"]
-              },
-              "dateReservationEnd": {
-                "type": "object",
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date"
-                  },
-                  "shift": {
-                    "type": "string"
-                  }
-                },
-                "required": ["date", "shift"]
+                  "required": ["date"]
+                }
               }
             }
-          }
           }
         ],
         "responses": {
@@ -168,7 +155,7 @@
                 }
               }
             }
-        }
+          }
         ],
         "responses": {
           "200": {
@@ -246,5 +233,5 @@
         }
       }
     }
-  }   
+  }
 }
