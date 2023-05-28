@@ -1,6 +1,12 @@
 const Reservation = require("../models/Reservation");
 const ErrorResponse = require("../utils/errorResponse");
 
+const handleExternalError = (err, res) => {
+  const externalErrorStack = err.response?.data?.errorStack || [];
+
+  res.locals.externalError = externalErrorStack;
+};
+
 //@desc     Lista todas as reservas
 //@route    GET /reservations
 //@access   Public
@@ -28,6 +34,9 @@ exports.getReservations = async (req, res, next) => {
         400
       )
     );
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
   }
 };
 
@@ -39,16 +48,20 @@ exports.getReservation = async (req, res, next) => {
     const reservation = await Reservation.findById(req.params.id);
 
     if (!reservation) {
-      throw new ErrorResponse(
-        "G8-404/0",
-        `Nenhuma reserva com o id ${req.params.id} encontrado`,
-        404
+      return next(
+        new ErrorResponse(
+          "G8-404/0",
+          `Nenhuma reserva com o id ${req.params.id} encontrado`,
+          404
+        )
       );
     }
 
     res.status(200).json({ success: true, data: reservation });
   } catch (err) {
-    next(err);
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
   }
 };
 
@@ -67,6 +80,9 @@ exports.createReservation = async (req, res, next) => {
         400
       )
     );
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
   }
 };
 
@@ -74,71 +90,90 @@ exports.createReservation = async (req, res, next) => {
 //@route    PUT /reservations/:id
 //@access   Public
 exports.updateReservation = async (req, res, next) => {
-  let reservation = await Reservation.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true, runValidators: true }
-  );
-
-  if (!reservation) {
-    next(
-      new ErrorResponse(
-        "G8-404/0",
-        `Nenhuma reserva com o id ${req.params.id} encontrado`,
-        404
-      )
+  try {
+    let reservation = await Reservation.findByIdAndUpdate(
+      req.params.id,
+      req.body
     );
+
+    if (!reservation) {
+      return next(
+        new ErrorResponse(
+          "G8-404/0",
+          `Nenhuma reserva com o id ${req.params.id} encontrado`,
+          404
+        )
+      );
+    }
+
+    const reservationUpdate = await Reservation.findById(req.params.id);
+
+    res.status(200).json({ success: true, data: reservationUpdate });
+  } catch (err) {
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
   }
-
-  const reservationUpdate = await Reservation.findById(req.params.id);
-
-  res.status(200).json({ success: true, data: reservationUpdate });
 };
 
 //@desc     Atualiza alguns atributos de uma reserva
 //@route    PATCH /reservations/:id
 //@access   Public
 exports.patchReservation = async (req, res, next) => {
-  let reservation = await Reservation.findByIdAndUpdate(
-    req.params.id,
-    {
-      dateReservationBegin: req.body.dateReservationBegin,
-      dateReservationEnd: req.body.dateReservationEnd,
-      //dateSchedule: req.body.dateSchedule
-    },
-    { new: true, runValidators: true }
-  );
-
-  if (!reservation) {
-    return next(
-      new ErrorResponse(
-        "G8-404/0",
-        `Nenhuma reserva com o id ${req.params.id} encontrada`,
-        404
-      )
+  try {
+    let reservation = await Reservation.findByIdAndUpdate(
+      req.params.id,
+      {
+        dateReservationBegin: req.body.dateReservationBegin,
+        dateReservationEnd: req.body.dateReservationEnd,
+        //dateSchedule: req.body.dateSchedule
+      },
+      { new: true, runValidators: true }
     );
+
+    if (!reservation) {
+      return next(
+        new ErrorResponse(
+          "G8-404/0",
+          `Nenhuma reserva com o id ${req.params.id} encontrada`,
+          404
+        )
+      );
+    }
+
+    const reservationUpdate = await Reservation.findById(req.params.id);
+
+    res.status(200).json({ success: true, data: reservationUpdate });
+  } catch (err) {
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
   }
-
-  const reservationUpdate = await Reservation.findById(req.params.id);
-
-  res.status(200).json({ success: true, data: reservationUpdate });
 };
 
 //@desc     Exclui uma reserva
 //@route    DELETE /reservations/:id
 //@access   Public
 exports.deleteReservation = async (req, res, next) => {
-  const reservationDelete = await Reservation.findByIdAndRemove(req.params.id);
-
-  if (!reservationDelete) {
-    next(
-      new ErrorResponse(
-        "G8-404/0",
-        `Nenhuma reserva com o id ${req.params.id} encontrado`,
-        404
-      )
+  try {
+    const reservationDelete = await Reservation.findByIdAndRemove(
+      req.params.id
     );
-  }
 
-  res.status(200).json({ success: true, data: {} });
+    if (!reservationDelete) {
+      return next(
+        new ErrorResponse(
+          "G8-404/0",
+          `Nenhuma reserva com o id ${req.params.id} encontrado`,
+          404
+        )
+      );
+    }
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    handleExternalError(err, res);
+
+    next(ErrorResponse);
+  }
 };
