@@ -1,5 +1,9 @@
 const Reservation = require("../models/Reservation");
 const ErrorResponse = require("../utils/errorResponse");
+const axios = require("axios");
+const { v4: uuidv4 } = require("uuid");
+const resourceMock = require("../mocks/resourceMock");
+const classMock = require("../mocks/classMock");
 
 const handleExternalError = (err, res) => {
   const externalErrorStack = err.response?.data?.errorStack || [];
@@ -68,9 +72,16 @@ exports.getReservation = async (req, res, next) => {
 //@desc     Cria uma reserva
 //@route    POST /reservations
 //@access   Public
+// prettier-ignore
 exports.createReservation = async (req, res, next) => {
   try {
     const reservation = await Reservation.create(req.body);
+    //resourceMocks.onAny().passThrough();
+    //classMocks.onAny().passThrough();
+
+    //const resources = await axios.get(`http://localhost:8084/resources/${resource}`);
+    //const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+
     res.status(201).json({ success: true, data: reservation });
   } catch (err) {
     next(

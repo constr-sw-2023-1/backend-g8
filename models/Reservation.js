@@ -1,19 +1,26 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const ReservationSchema = new mongoose.Schema(
   {
-    dateReservationBegin: { type: Date, required: [true, 'Adicione uma data'] },
-    dateReservationEnd: { type: Date, required: [true, 'Adicione uma data'] },
+    _id: {
+      type: String,
+      default: uuidv4,
+    },
+    dateReservationBegin: { type: Date, required: [true, "Adicione uma data"] },
+    dateReservationEnd: { type: Date, required: [true, "Adicione uma data"] },
     resource: {
-      resourceId: { type: Number },
-      resourceName: { type: String },
+      type: String,
+      ref: "Resource",
+      required: true,
     },
     class: {
-      classId: { type: Number },
-      className: { type: String },
+      type: String,
+      ref: "Class",
+      required: true,
     },
   },
   { timestamps: true }
-)
+);
 
-module.exports = mongoose.model('Reservation', ReservationSchema)
+module.exports = mongoose.model("Reservation", ReservationSchema);
