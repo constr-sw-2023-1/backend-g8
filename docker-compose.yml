@@ -3,8 +3,7 @@ networks:
   grupo8:
     driver: bridge
 
-services:
-   # Reservations Backend   
+services:  
   reservations-backend:
     container_name: reservations-backend
     build: .
@@ -12,5 +11,17 @@ services:
       - 8088:8088
     volumes:
       - ./:/usr/src/app
+    networks:
+      - grupo8
+    depends_on:
+      - database
+
+  database:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./.dataMongo:/data/db
     networks:
       - grupo8
