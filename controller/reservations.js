@@ -145,12 +145,11 @@ exports.updateReservation = async (req, res, next) => {
 //@access   Public
 exports.patchReservation = async (req, res, next) => {
   try {
-    let reservation = await Reservation.findByIdAndUpdate(
+    const reservation = await Reservation.findByIdAndUpdate(
       req.params.id,
       {
-        dateReservationBegin: req.body.dateReservationBegin,
-        dateReservationEnd: req.body.dateReservationEnd,
-        //dateSchedule: req.body.dateSchedule
+        dateReservationBegin: req.body.dateReservationBegin.date,
+        dateReservationEnd: req.body.dateReservationEnd.date,
       },
       { new: true, runValidators: true }
     );
@@ -165,13 +164,9 @@ exports.patchReservation = async (req, res, next) => {
       );
     }
 
-    const reservationUpdate = await Reservation.findById(req.params.id);
-
-    res.status(200).json({ success: true, data: reservationUpdate });
+    res.status(200).json({ success: true, data: reservation });
   } catch (err) {
-    handleExternalError(err, res);
-
-    next(ErrorResponse);
+    next(err);
   }
 };
 
