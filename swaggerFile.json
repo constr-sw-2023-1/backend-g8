@@ -12,14 +12,15 @@
   "paths": {
     "/reservations": {
       "get": {
-        "summary": "Retorna todas as reservas ou reservas por pesquisa",
+        "summary": "Retorna todas as reservas ou reservas por pesquisa SIMPLES",
         "description": "",
         "parameters": [
           {
             "name": "dateReservationBegin",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "x-example": "[gt]=2023-05-15"
           },
           {
             "name": "dateReservationEnd",
