@@ -47,6 +47,12 @@
             "schema": {
               "type": "object",
               "properties": {
+                "resource": {
+                  "type": "string"
+                },
+                "class": {
+                  "type": "string"
+                },
                 "dateReservationBegin": {
                   "type": "object",
                   "properties": {
@@ -67,7 +73,14 @@
                   },
                   "required": ["date"]
                 }
-              }
+              },
+              "required": [
+                "_id",
+                "resource",
+                "class",
+                "dateReservationBegin",
+                "dateReservationEnd"
+              ]
             }
           }
         ],
@@ -101,31 +114,18 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Put reservation",
+            "name": "Post reservation",
             "in": "body",
             "required": "true",
             "description": "JSON object",
             "schema": {
               "type": "object",
               "properties": {
-                "dateSchedule": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    },
-                    "shift": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["date", "shift"]
+                "resource": {
+                  "type": "string"
+                },
+                "class": {
+                  "type": "string"
                 },
                 "dateReservationBegin": {
                   "type": "object",
@@ -133,12 +133,9 @@
                     "date": {
                       "type": "string",
                       "format": "date"
-                    },
-                    "shift": {
-                      "type": "string"
                     }
                   },
-                  "required": ["date", "shift"]
+                  "required": ["date"]
                 },
                 "dateReservationEnd": {
                   "type": "object",
@@ -146,14 +143,18 @@
                     "date": {
                       "type": "string",
                       "format": "date"
-                    },
-                    "shift": {
-                      "type": "string"
                     }
                   },
-                  "required": ["date", "shift"]
+                  "required": ["date"]
                 }
-              }
+              },
+              "required": [
+                "_id",
+                "resource",
+                "class",
+                "dateReservationBegin",
+                "dateReservationEnd"
+              ]
             }
           }
         ],
@@ -185,12 +186,9 @@
                     "date": {
                       "type": "string",
                       "format": "date"
-                    },
-                    "shift": {
-                      "type": "string"
                     }
                   },
-                  "required": ["date", "shift"]
+                  "required": ["date"]
                 },
                 "dateReservationEnd": {
                   "type": "object",
@@ -198,12 +196,9 @@
                     "date": {
                       "type": "string",
                       "format": "date"
-                    },
-                    "shift": {
-                      "type": "string"
                     }
                   },
-                  "required": ["date", "shift"]
+                  "required": ["date"]
                 }
               }
             }

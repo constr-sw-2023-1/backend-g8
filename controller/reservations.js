@@ -1,5 +1,8 @@
 const Reservation = require("../models/Reservation");
 const ErrorResponse = require("../utils/errorResponse");
+const axios = require("axios");
+const resourceMock = require("../mocks/resourceMock");
+const classMock = require("../mocks/classMock");
 
 const handleExternalError = (err, res) => {
   const externalErrorStack = err.response?.data?.errorStack || [];
@@ -43,6 +46,7 @@ exports.getReservations = async (req, res, next) => {
 //@desc     Obtém uma reserva específica
 //@route    GET /reservations/:id
 //@access   Public
+// prettier-ignore
 exports.getReservation = async (req, res, next) => {
   try {
     const reservation = await Reservation.findById(req.params.id);
@@ -68,10 +72,30 @@ exports.getReservation = async (req, res, next) => {
 //@desc     Cria uma reserva
 //@route    POST /reservations
 //@access   Public
+// prettier-ignore
 exports.createReservation = async (req, res, next) => {
   try {
-    const reservation = await Reservation.create(req.body);
-    res.status(201).json({ success: true, data: reservation });
+    const { resource, class: classId } = req.body;
+
+    resourceMock.onAny().passThrough();
+    classMock.onAny().passThrough();
+    const resources = await axios.get(`http://localhost:8084/resources/${resource}`);
+    const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+    
+    if (resources.status === 200 && classes.status === 200) {
+
+      const reservationData = {
+        ...req.body,
+        resource: resources.data.data,
+        class: classes.data.data
+      };
+      const reservation = await Reservation.create(reservationData);
+      
+      res.status(201).json({ success: true, data: reservation });
+
+    } else {
+      return next(new ErrorResponse("G8-500/1", `Erro interno no servidor, requisição do Resource ${resource} ou Class ${classId} falhou`, 500));
+    }
   } catch (err) {
     next(
       new ErrorResponse(
@@ -91,25 +115,58 @@ exports.createReservation = async (req, res, next) => {
 //@access   Public
 exports.updateReservation = async (req, res, next) => {
   try {
-    let reservation = await Reservation.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    let reservation = await Reservation.findById(req.params.id);
 
     if (!reservation) {
       return next(
         new ErrorResponse(
           "G8-404/0",
-          `Nenhuma reserva com o id ${req.params.id} encontrado`,
+          `Nenhuma reserva com o ID ${req.params.id} encontrada`,
           404
         )
       );
     }
 
-    const reservationUpdate = await Reservation.findById(req.params.id);
+    const { resource, class: classId } = req.body;
 
-    res.status(200).json({ success: true, data: reservationUpdate });
+    resourceMock.onAny().passThrough();
+    classMock.onAny().passThrough();
+    const resources = await axios.get(
+      `http://localhost:8084/resources/${resource}`
+    );
+    const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+
+    if (resources.status === 200 && classes.status === 200) {
+      const reservationData = {
+        ...req.body,
+        resource: resources.data.data,
+        class: classes.data.data,
+      };
+
+      reservation = await Reservation.findByIdAndUpdate(
+        req.params.id,
+        reservationData,
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json({ success: true, data: reservation });
+    } else {
+      return next(
+        new ErrorResponse(
+          "G8-500/1",
+          `Erro interno no servidor, requisição do Resource ${resource} ou Class ${classId} falhou`,
+          500
+        )
+      );
+    }
   } catch (err) {
+    next(
+      new ErrorResponse(
+        "G8-400/0",
+        "Não foi possível atualizar a reserva, verifique o JSON",
+        400
+      )
+    );
     handleExternalError(err, res);
 
     next(ErrorResponse);
@@ -121,12 +178,11 @@ exports.updateReservation = async (req, res, next) => {
 //@access   Public
 exports.patchReservation = async (req, res, next) => {
   try {
-    let reservation = await Reservation.findByIdAndUpdate(
+    const reservation = await Reservation.findByIdAndUpdate(
       req.params.id,
       {
-        dateReservationBegin: req.body.dateReservationBegin,
-        dateReservationEnd: req.body.dateReservationEnd,
-        //dateSchedule: req.body.dateSchedule
+        dateReservationBegin: req.body.dateReservationBegin.date,
+        dateReservationEnd: req.body.dateReservationEnd.date,
       },
       { new: true, runValidators: true }
     );
@@ -141,13 +197,9 @@ exports.patchReservation = async (req, res, next) => {
       );
     }
 
-    const reservationUpdate = await Reservation.findById(req.params.id);
-
-    res.status(200).json({ success: true, data: reservationUpdate });
+    res.status(200).json({ success: true, data: reservation });
   } catch (err) {
-    handleExternalError(err, res);
-
-    next(ErrorResponse);
+    next(err);
   }
 };
 
