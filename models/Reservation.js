@@ -7,17 +7,29 @@ const ReservationSchema = new mongoose.Schema(
       type: String,
       default: uuidv4,
     },
-    dateReservationBegin: { type: Date, required: [true, "Adicione uma data"] },
-    dateReservationEnd: { type: Date, required: [true, "Adicione uma data"] },
+    dateReservationBegin: {
+      type: Date,
+      required: [true, "Adicione uma data"],
+    },
+    dateReservationEnd: {
+      type: Date,
+      required: [true, "Adicione uma data"],
+    },
     resource: {
-      type: String,
-      ref: "Resource",
-      required: true,
+      _id: {
+        type: String,
+        required: true,
+      },
+      resourceName: String,
     },
     class: {
-      type: String,
-      ref: "Class",
-      required: true,
+      _id: {
+        type: String,
+        required: true,
+      },
+      numClass: String,
+      schedule: String,
+      userName: String,
     },
   },
   { timestamps: true }

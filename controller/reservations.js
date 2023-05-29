@@ -1,7 +1,6 @@
 const Reservation = require("../models/Reservation");
 const ErrorResponse = require("../utils/errorResponse");
 const axios = require("axios");
-const { v4: uuidv4 } = require("uuid");
 const resourceMock = require("../mocks/resourceMock");
 const classMock = require("../mocks/classMock");
 
@@ -47,6 +46,7 @@ exports.getReservations = async (req, res, next) => {
 //@desc     Obtém uma reserva específica
 //@route    GET /reservations/:id
 //@access   Public
+// prettier-ignore
 exports.getReservation = async (req, res, next) => {
   try {
     const reservation = await Reservation.findById(req.params.id);
@@ -75,14 +75,27 @@ exports.getReservation = async (req, res, next) => {
 // prettier-ignore
 exports.createReservation = async (req, res, next) => {
   try {
-    const reservation = await Reservation.create(req.body);
-    //resourceMocks.onAny().passThrough();
-    //classMocks.onAny().passThrough();
+    const { resource, class: classId } = req.body;
 
-    //const resources = await axios.get(`http://localhost:8084/resources/${resource}`);
-    //const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+    resourceMock.onAny().passThrough();
+    classMock.onAny().passThrough();
+    const resources = await axios.get(`http://localhost:8084/resources/${resource}`);
+    const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+    
+    if (resources.status === 200 && classes.status === 200) {
 
-    res.status(201).json({ success: true, data: reservation });
+      const reservationData = {
+        ...req.body,
+        resource: resources.data.data,
+        class: classes.data.data
+      };
+      const reservation = await Reservation.create(reservationData);
+      
+      res.status(201).json({ success: true, data: reservation });
+
+    } else {
+      return next(new ErrorResponse("G8-500/1", `Erro interno no servidor, requisição do Resource ${resource} ou Class ${classId} falhou`, 500));
+    }
   } catch (err) {
     next(
       new ErrorResponse(
