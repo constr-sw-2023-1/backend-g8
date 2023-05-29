@@ -6,4 +6,4 @@ Para executar o projeto:
 docker compose up --build
 ```
 
-![Diagramas](.\assets\Diagramas.asta)
+![Diagramas](assets/Diagramas.asta)
