@@ -15,7 +15,7 @@ const handleExternalError = (err, res) => {
 //@access   Public
 exports.getReservations = async (req, res, next) => {
   try {
-    let reqQuery = { ...req.query };
+    let reqQuery = { ...req.query, active: true };
 
     // Create query string
     let queryStr = JSON.stringify(reqQuery);
@@ -208,8 +208,8 @@ exports.patchReservation = async (req, res, next) => {
 //@access   Public
 exports.deleteReservation = async (req, res, next) => {
   try {
-    const reservationDelete = await Reservation.findByIdAndRemove(
-      req.params.id
+    const reservationDelete = await Reservation.findByIdAndUpdate(
+      req.params.id, {active: false}
     );
 
     if (!reservationDelete) {
@@ -222,7 +222,9 @@ exports.deleteReservation = async (req, res, next) => {
       );
     }
 
-    res.status(200).json({ success: true, data: {} });
+    const reservationDeleted = await Reservation.findById(req.params.id);
+
+    res.status(200).json({ success: true, data: reservationDeleted });
   } catch (err) {
     handleExternalError(err, res);
 

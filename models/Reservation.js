@@ -31,6 +31,10 @@ const ReservationSchema = new mongoose.Schema(
       schedule: String,
       userName: String,
     },
+    active: {
+      type: Boolean,
+      default: true
+    }
   },
   { timestamps: true }
 );
