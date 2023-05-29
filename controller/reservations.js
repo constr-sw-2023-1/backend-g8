@@ -115,25 +115,58 @@ exports.createReservation = async (req, res, next) => {
 //@access   Public
 exports.updateReservation = async (req, res, next) => {
   try {
-    let reservation = await Reservation.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    let reservation = await Reservation.findById(req.params.id);
 
     if (!reservation) {
       return next(
         new ErrorResponse(
           "G8-404/0",
-          `Nenhuma reserva com o id ${req.params.id} encontrado`,
+          `Nenhuma reserva com o ID ${req.params.id} encontrada`,
           404
         )
       );
     }
 
-    const reservationUpdate = await Reservation.findById(req.params.id);
+    const { resource, class: classId } = req.body;
 
-    res.status(200).json({ success: true, data: reservationUpdate });
+    resourceMock.onAny().passThrough();
+    classMock.onAny().passThrough();
+    const resources = await axios.get(
+      `http://localhost:8084/resources/${resource}`
+    );
+    const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
+
+    if (resources.status === 200 && classes.status === 200) {
+      const reservationData = {
+        ...req.body,
+        resource: resources.data.data,
+        class: classes.data.data,
+      };
+
+      reservation = await Reservation.findByIdAndUpdate(
+        req.params.id,
+        reservationData,
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json({ success: true, data: reservation });
+    } else {
+      return next(
+        new ErrorResponse(
+          "G8-500/1",
+          `Erro interno no servidor, requisição do Resource ${resource} ou Class ${classId} falhou`,
+          500
+        )
+      );
+    }
   } catch (err) {
+    next(
+      new ErrorResponse(
+        "G8-400/0",
+        "Não foi possível atualizar a reserva, verifique o JSON",
+        400
+      )
+    );
     handleExternalError(err, res);
 
     next(ErrorResponse);
