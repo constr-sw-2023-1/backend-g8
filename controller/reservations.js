@@ -15,7 +15,7 @@ const handleExternalError = (err, res) => {
 //@access   Public
 exports.getReservations = async (req, res, next) => {
   try {
-    let reqQuery = { ...req.query, active: true };
+    let reqQuery = { ...req.query };
 
     // Create query string
     let queryStr = JSON.stringify(reqQuery);
