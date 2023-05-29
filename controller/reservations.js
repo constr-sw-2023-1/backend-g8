@@ -181,8 +181,8 @@ exports.patchReservation = async (req, res, next) => {
     const reservation = await Reservation.findByIdAndUpdate(
       req.params.id,
       {
-        dateReservationBegin: req.body.dateReservationBegin.date,
-        dateReservationEnd: req.body.dateReservationEnd.date,
+        dateReservationBegin: req.body.dateReservationBegin,
+        dateReservationEnd: req.body.dateReservationEnd,
       },
       { new: true, runValidators: true }
     );

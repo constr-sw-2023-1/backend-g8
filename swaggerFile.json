@@ -54,28 +54,13 @@
                   "type": "string"
                 },
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
               },
               "required": [
-                "_id",
                 "resource",
                 "class",
                 "dateReservationBegin",
@@ -114,6 +99,12 @@
         "description": "",
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "Post reservation",
             "in": "body",
             "required": "true",
@@ -128,28 +119,13 @@
                   "type": "string"
                 },
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
               },
               "required": [
-                "_id",
                 "resource",
                 "class",
                 "dateReservationBegin",
@@ -181,24 +157,10 @@
               "type": "object",
               "properties": {
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
               }
             }
