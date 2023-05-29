@@ -19,8 +19,7 @@
             "name": "dateReservationBegin",
             "in": "query",
             "required": false,
-            "type": "string",
-            "x-example": "[gt]=2023-05-15"
+            "type": "string"
           },
           {
             "name": "dateReservationEnd",
