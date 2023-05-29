@@ -6,21 +6,21 @@
     "description": ""
   },
   "host": "localhost:8088",
-  "basePath": "/reservations",
   "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/": {
+    "/reservations": {
       "get": {
-        "summary": "Retorna todas as reservas ou reservas por pesquisa",
+        "summary": "Retorna todas as reservas ou reservas por pesquisa SIMPLES",
         "description": "",
         "parameters": [
           {
             "name": "dateReservationBegin",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "x-example": "[gt]=2023-05-15"
           },
           {
             "name": "dateReservationEnd",
@@ -54,33 +54,24 @@
                   "type": "string"
                 },
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
               },
               "required": [
-                "_id",
                 "resource",
                 "class",
                 "dateReservationBegin",
                 "dateReservationEnd"
-              ]
+              ],
+              "example": {
+                "resource": "7920e5df-ee80-417e-a9a6-2115f840014b",
+                "class": "e74099e7-f394-42ef-87b9-8013fd9f0e21",
+                "dateReservationBegin": "2023-06-01",
+                "dateReservationEnd": "2023-06-01"
+              }
             }
           }
         ],
@@ -91,7 +82,7 @@
         }
       }
     },
-    "/{id}": {
+    "/reservations/{id}": {
       "get": {
         "summary": "Retorna uma reserva por id",
         "description": "",
@@ -114,6 +105,12 @@
         "description": "",
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "Post reservation",
             "in": "body",
             "required": "true",
@@ -128,33 +125,24 @@
                   "type": "string"
                 },
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
               },
               "required": [
-                "_id",
                 "resource",
                 "class",
                 "dateReservationBegin",
                 "dateReservationEnd"
-              ]
+              ],
+              "example": {
+                "resource": "7920e5df-ee80-417e-a9a6-2115f840014b",
+                "class": "e74099e7-f394-42ef-87b9-8013fd9f0e21",
+                "dateReservationBegin": "2023-12-10",
+                "dateReservationEnd": "2023-12-10"
+              }
             }
           }
         ],
@@ -181,25 +169,15 @@
               "type": "object",
               "properties": {
                 "dateReservationBegin": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 },
                 "dateReservationEnd": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date"
-                    }
-                  },
-                  "required": ["date"]
+                  "type": "string"
                 }
+              },
+              "example": {
+                "dateReservationBegin": "2023-02-25",
+                "dateReservationEnd": "2023-02-25"
               }
             }
           }
