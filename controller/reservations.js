@@ -17,13 +17,28 @@ exports.getReservations = async (req, res, next) => {
   try {
     let reqQuery = { ...req.query };
 
-    // Create query string
+    // Cria a query string
     let queryStr = JSON.stringify(reqQuery);
 
-    // Create query operators
+    // Cria os query operators para pesquisa
     queryStr = queryStr.replace(
-      /\b(gt|gte|lt|lte|like|ne)\b/g,
+      /\b(gt|gteq|lt|lteq|like|neq)\b/g,
       (match) => `$${match}`
+    );
+
+    queryStr = queryStr.replace(
+      /\b(gteq)\b/g,
+      (match) => `gte`
+    );
+
+    queryStr = queryStr.replace(
+      /\b(lteq)\b/g,
+      (match) => `lte`
+    );
+
+    queryStr = queryStr.replace(
+      /\b(neq)\b/g,
+      (match) => `ne`
     );
 
     const reservations = await Reservation.find(JSON.parse(queryStr));
