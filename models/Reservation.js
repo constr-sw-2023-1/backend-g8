@@ -20,7 +20,7 @@ const ReservationSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      resourceName: String,
+      description: String,
     },
     class: {
       _id: {
@@ -28,8 +28,6 @@ const ReservationSchema = new mongoose.Schema(
         required: true,
       },
       numClass: String,
-      schedule: String,
-      userName: String,
     },
     active: {
       type: Boolean,

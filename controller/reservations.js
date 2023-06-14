@@ -92,8 +92,8 @@ exports.createReservation = async (req, res, next) => {
   try {
     const { resource, class: classId } = req.body;
 
-    resourceMock.onAny().passThrough();
-    classMock.onAny().passThrough();
+    // resourceMock.onAny().passThrough();
+    // classMock.onAny().passThrough();
     const resources = await axios.get(`http://localhost:8084/resources/${resource}`);
     const classes = await axios.get(`http://localhost:8086/classes/${classId}`);
     
