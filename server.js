@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swaggerFile.json");
 const { errorHandler, errorStack } = require("./middleware/errorHandler");
+const { configureServer } = require("./config/server-config");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -16,6 +17,8 @@ const PORT = process.env.PORT || 8088;
 const app = express();
 
 app.use(express.json());
+
+configureServer(app);
 
 app.use("/reservations", reservations);
 
